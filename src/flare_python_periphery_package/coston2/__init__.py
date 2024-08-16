@@ -1,8 +1,10 @@
-from .mapper import (
-    name_to_abi,
-    name_to_address,
-    names_to_addresses,
-)
-from .abis import abis
+from .abis import _ABIGetter, abis
 
-all = ["abis", "name_to_abi", "name_to_address", "name_to_addresses"]
+all = ["abis", "name_to_abi"]
+
+
+def name_to_abi(name: str):
+    try:
+        return _ABIGetter.name_to_getter[name].__get__()
+    except Exception as e:
+        raise KeyError(f"No official Flare Network contract with name: '{name}'") from e
