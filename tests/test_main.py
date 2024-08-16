@@ -20,3 +20,4 @@ class TestEverythingImports(unittest.TestCase):
         for chain in [fpp.coston, fpp.coston2, fpp.flare, fpp.songbird]:
             chain.name_to_abi
             chain.abis
+            self.assertRaises(KeyError, lambda: chain.name_to_abi("sdfj"))
