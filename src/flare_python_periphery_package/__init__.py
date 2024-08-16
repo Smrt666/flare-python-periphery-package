@@ -36,13 +36,13 @@ FLARE_CONTRACT_REGISTRY_ADDRESS = Web3.to_checksum_address(
 
 def name_to_address(name: str, provider: Web3) -> str:
     fcr_contract = provider.eth.contract(
-        FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("FlareContractRegistry")
+        FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("IFlareContractRegistry")
     )
     return fcr_contract.functions.getContractAddressByName(name).call()
 
 
 def names_to_addresses(names: list[str], provider: Web3) -> list[str]:
     fcr_contract = provider.eth.contract(
-        FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("FlareContractRegistry")
+        FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("IFlareContractRegistry")
     )
     return fcr_contract.functions.getContractAddressesByName(names).call()

@@ -1,6 +1,6 @@
 from .abis import _ABIGetter, abis
 
-all = ["abis", "name_to_abi"]
+__all__ = ["abis", "name_to_abi"]
 
 
 def name_to_abi(name: str):
