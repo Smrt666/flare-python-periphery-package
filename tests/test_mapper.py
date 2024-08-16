@@ -39,7 +39,8 @@ def create_chain_tests(network):
             )
 
             self.assertRaises(
-                exceptions.Web3ValidationError, lambda: fpp.names_to_addresses("FlareContractRegistry", self.provider)  # type: ignore
+                exceptions.Web3ValidationError,
+                lambda: fpp.names_to_addresses("FlareContractRegistry", self.provider),  # type: ignore
             )
 
     return TestAddressGetter
