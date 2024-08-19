@@ -22,10 +22,13 @@ python3 -m twine upload --repository testpypi dist/*
 This library exposes 10 names at top level:
  * `name_to_abi(name:str, network: str)` - returns abi as a python object (a list of dicts).
     Name is the name of contract, network can be one of coston, coston2, songbird and flare. 
- * `name_to_address(name: str, provider: Web3) -> str`, `names_to_addresses(names: "list[str]", provider: Web3) -> "list[str]"`, `async_name_to_address(name: str, provider: AsyncWeb3) -> str` and `async_names_to_addresses(names: "list[str]", provider: AsyncWeb3) -> "list[str]"`- use provider to get contract address(es). Reads from FlareContractRegistryLibrary.
+ * `name_to_address(name: str, provider: Web3) -> str`, `names_to_addresses(names: "list[str]", provider: Web3) -> "list[str]"`,
+  `async_name_to_address(name: str, provider: AsyncWeb3) -> str` and 
+  `async_names_to_addresses(names: "list[str]", provider: AsyncWeb3) -> "list[str]"` - 
+  use provider to get contract address(es). They all read from FlareContractRegistryLibrary on chain.
  * `FLARE_CONTRACT_REGISTRY_ADDRESS` - hardcoded web3 checksum address constant, the same for all chains and should never change.
  * `coston`, `coston2`, `flare` and `songbird` - namespaces with 2 exports:
-    - `abi` - a class allowing access to abis using .ContractName syntax
+    - `abis` - a class allowing access to abis using `.ContractName` syntax
     - `name_to_abi(name: str)` - the same as top level function, with omitted network
 
 Example:
@@ -58,5 +61,5 @@ async def main():
 asyncio.run(main())
 ```
 
-Package also includes abis as json files. They are located in artifacts/contracts
+Package also includes abis as `.json` files. They are located in `artifacts/contracts`
 folder for every chain.
