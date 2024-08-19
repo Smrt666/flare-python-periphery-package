@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "flare_python_periphery_package"
-version = "0.0.10"
+version = "0.1.0"
 authors = [{ name = "Jošt Smrtnik", email = "jost.smrtnik@gmail.com" }]
 description = "Test package for flare periphery."
 readme = "README.md"
@@ -16,8 +16,8 @@ classifiers = [
 dependencies = ["web3>=6.20.2"]
 
 [project.urls]
-Homepage = "https://github.com/pypa/sampleproject"
-Issues = "https://github.com/pypa/sampleproject/issues"
+Homepage = "https://github.com/Smrt666/flare-python-periphery-package"
+Issues = "https://github.com/Smrt666/flare-python-periphery-package/issues"
 
 
 [tool.hatch.build.targets.wheel]

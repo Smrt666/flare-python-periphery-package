@@ -57,3 +57,6 @@ async def main():
 
 asyncio.run(main())
 ```
+
+Package also includes abis as json files. They are located in artifacts/contracts
+folder for every chain.
