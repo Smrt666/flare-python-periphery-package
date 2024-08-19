@@ -3,6 +3,7 @@ TODO:
 * create LICENSE
 * update pyproject.toml
 * update readme
+* IContractName?, checksum address?
 
 Instalation from: TestPyPI
 ```bash
