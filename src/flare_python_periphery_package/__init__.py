@@ -1,4 +1,4 @@
-from web3 import Web3
+from web3 import AsyncWeb3, Web3
 
 from . import coston, coston2, flare, songbird
 
@@ -41,8 +41,24 @@ def name_to_address(name: str, provider: Web3) -> str:
     return fcr_contract.functions.getContractAddressByName(name).call()
 
 
-def names_to_addresses(names: list[str], provider: Web3) -> list[str]:
+def names_to_addresses(names: "list[str]", provider: Web3) -> "list[str]":
     fcr_contract = provider.eth.contract(
         FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("IFlareContractRegistry")
     )
     return fcr_contract.functions.getContractAddressesByName(names).call()
+
+
+async def async_name_to_address(name: str, provider: AsyncWeb3) -> str:
+    fcr_contract = provider.eth.contract(
+        FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("IFlareContractRegistry")
+    )
+    return await fcr_contract.functions.getContractAddressByName(name).call()
+
+
+async def async_names_to_addresses(
+    names: "list[str]", provider: AsyncWeb3
+) -> "list[str]":
+    fcr_contract = provider.eth.contract(
+        FLARE_CONTRACT_REGISTRY_ADDRESS, abi=flare.name_to_abi("IFlareContractRegistry")
+    )
+    return await fcr_contract.functions.getContractAddressesByName(names).call()

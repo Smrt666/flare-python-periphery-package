@@ -14,7 +14,9 @@ class TestEverythingImports(unittest.TestCase):
         fpp.flare
         fpp.songbird
         fpp.name_to_address
-        fpp.name_to_address
+        fpp.names_to_addresses
+        fpp.async_name_to_address
+        fpp.async_names_to_addresses
 
     def test_chain_import(self):
         for chain in [fpp.coston, fpp.coston2, fpp.flare, fpp.songbird]:

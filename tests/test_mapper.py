@@ -1,6 +1,6 @@
 import unittest
 
-from web3 import Web3, eth, exceptions
+from web3 import AsyncWeb3, Web3, exceptions
 
 import src.flare_python_periphery_package as fpp
 
@@ -14,7 +14,7 @@ def create_chain_tests(network):
             rpc_url = f"https://{network}-api.flare.network/ext/bc/C/rpc"
             cls.provider = Web3(Web3.HTTPProvider(rpc_url))
 
-        def test_get_flare_contract_registry(self):
+        def test_name_to_address(self):
             addr = fpp.name_to_address("FlareContractRegistry", self.provider)
             self.assertEqual(addr, fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
 
@@ -43,10 +43,45 @@ def create_chain_tests(network):
                 lambda: fpp.names_to_addresses("FlareContractRegistry", self.provider),  # type: ignore
             )
 
-    return TestAddressGetter
+    class TestAsyncAddressGetter(unittest.IsolatedAsyncioTestCase):
+        async def asyncSetUp(self) -> None:
+            rpc_url = f"https://{network}-api.flare.network/ext/bc/C/rpc"
+            self.aprovider = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(rpc_url))
+
+        async def test_async_name_to_address(self):
+            addr = await fpp.async_name_to_address(
+                "FlareContractRegistry", self.aprovider
+            )
+            self.assertEqual(addr, fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
+
+        async def test_names_to_addresses(self):
+            addrs = await fpp.async_names_to_addresses(
+                ["FlareContractRegistry", "FtsoRewardManager"], self.aprovider
+            )
+            self.assertEqual(len(addrs), 2)
+            self.assertEqual(addrs[0], fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
+
+        async def test_get_nonexistent_address(self):
+            addr = await fpp.async_name_to_address("asejsojfsoejfse", self.aprovider)
+            self.assertEqual(addr, "0x0000000000000000000000000000000000000000")
+
+        async def test_async_get_nonexistent_addresses(self):
+            addrs = await fpp.async_names_to_addresses(["a", "b", "c"], self.aprovider)
+            self.assertEqual(addrs, ["0x0000000000000000000000000000000000000000"] * 3)
+
+        async def test_async_invalid_input(self):
+            with self.assertRaises(exceptions.Web3ValidationError):
+                await fpp.async_name_to_address(5, self.aprovider)  # type: ignore
+
+            with self.assertRaises(exceptions.Web3ValidationError):
+                await fpp.async_names_to_addresses("FlareContractRegistry", self.aprovider)  # type: ignore
+
+    return TestAddressGetter, TestAsyncAddressGetter
 
 
-TestCostonAddressGetter = create_chain_tests("coston")
-TestCoston2AddressGetter = create_chain_tests("coston2")
-TestFlareAddressGetter = create_chain_tests("flare")
-TestSongbirdAddressGetter = create_chain_tests("songbird")
+TestCostonAddressGetter, TestAsyncCostonAddressGetter = create_chain_tests("coston")
+TestCoston2AddressGetter, TestAsyncCoston2AddressGetter = create_chain_tests("coston2")
+TestFlareAddressGetter, TestAsyncFlareAddressGetter = create_chain_tests("flare")
+TestSongbirdAddressGetter, TestAsyncSongbirdAddressGetter = create_chain_tests(
+    "songbird"
+)

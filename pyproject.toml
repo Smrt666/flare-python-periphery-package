@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "flare_python_periphery_package"
-version = "0.0.9"
+version = "0.0.10"
 authors = [{ name = "Jošt Smrtnik", email = "jost.smrtnik@gmail.com" }]
 description = "Test package for flare periphery."
 readme = "README.md"
