@@ -39,30 +39,52 @@ Example:
 import asyncio
 
 import flare_python_periphery_package as fpp
+from eth_typing.evm import ChecksumAddress
 from web3 import AsyncHTTPProvider, AsyncWeb3, HTTPProvider, Web3
 from web3.middleware.geth_poa import geth_poa_middleware
 
 url = "https://coston2-api.flare.network/ext/C/rpc"
 
-abi1 = fpp.name_to_abi("IFlareContractRegistry", "coston2")
-print(f"abi1: {str(abi1)[:50]}...")
-abi2 = fpp.coston2.name_to_abi("IFlareContractRegistry")
-print(f"abi2: {str(abi2)[:50]}...")
-abi3 = fpp.coston2.abis.IFlareContractRegistry
+# Get abi
+abi3 = fpp.coston2.products.FlareContractRegistry.abi  # the recommended way
 print(f"abi3: {str(abi3)[:50]}...")
+print("Interface name:", fpp.coston2.products.FlareContractRegistry.interface)
+abi3i = fpp.coston2.interface_abis.IFlareContractRegistry
+print(f"abi3i: {str(abi3i)[:50]}...")
 
+abi1 = fpp.name_to_abi("FlareContractRegistry", "coston2")
+print(f"abi1: {str(abi1)[:50]}...")
+abi1i = fpp.interface_to_abi("IFlareContractRegistry", "coston2")
+print(f"abi1i: {str(abi1i)[:50]}...")
+
+abi2 = fpp.coston2.name_to_abi("FlareContractRegistry")
+print(f"abi2: {str(abi2)[:50]}...")
+abi2i = fpp.coston2.interface_to_abi("IFlareContractRegistry")
+print(f"abi2i: {str(abi2i)[:50]}...")
+
+# Get addresses
 w3 = Web3(HTTPProvider(url), middlewares=[geth_poa_middleware])
-WNat_address = Web3.to_checksum_address(fpp.name_to_address("WNat", w3))
+
+WNat_address = fpp.coston2.products.WNat.get_address(w3)  # The recommended way
 print(f"WNat_address: {WNat_address}")
+WNat_address2: ChecksumAddress = fpp.name_to_address("WNat", w3)
+print(f"WNat_address (again): {WNat_address2}")
+
 
 async def main():
     aw3 = AsyncWeb3(AsyncHTTPProvider(url))
-    addresses = await fpp.async_names_to_addresses(["WNat"], aw3)
+    addresses = await fpp.async_names_to_addresses(
+        ["WNat", "IDontExist", "FlareContractRegistry"], aw3
+    )
     print(f"addresses: {addresses}")
+
+    address = await fpp.coston2.products.FastUpdater.async_get_address(aw3)
+    print(f"FastUpader address: {address}")
 
 
 asyncio.run(main())
 ```
+
 
 Package also includes abis as `.json` files. They are located in `artifacts/contracts`
 folder for every chain.
