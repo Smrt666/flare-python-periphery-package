@@ -13,10 +13,24 @@ def create_chain_tests(network):
         def setUpClass(cls) -> None:
             rpc_url = f"https://{network}-api.flare.network/ext/bc/C/rpc"
             cls.provider = Web3(Web3.HTTPProvider(rpc_url))
+            cls.module = {
+                "coston2": fpp.coston2,
+                "coston": fpp.coston,
+                "flare": fpp.flare,
+                "songbird": fpp.songbird,
+            }[network]
 
         def test_name_to_address(self):
             addr = fpp.name_to_address("FlareContractRegistry", self.provider)
             self.assertEqual(addr, fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
+            
+            addr = self.module.products.FlareContractRegistry.get_address(self.provider)
+            self.assertEqual(addr, fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
+
+            if network == "coston2":
+                # this one has a wierd interface name
+                addr = self.module.products.ValidatorRewardManager.get_address(self.provider)
+                self.assertNotEqual(addr, "0x0000000000000000000000000000000000000000")
 
         def test_names_to_addresses(self):
             addrs = fpp.names_to_addresses(
@@ -47,11 +61,20 @@ def create_chain_tests(network):
         async def asyncSetUp(self) -> None:
             rpc_url = f"https://{network}-api.flare.network/ext/bc/C/rpc"
             self.aprovider = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(rpc_url))
+            self.module = {
+                "coston2": fpp.coston2,
+                "coston": fpp.coston,
+                "flare": fpp.flare,
+                "songbird": fpp.songbird,
+            }[network]
 
         async def test_async_name_to_address(self):
             addr = await fpp.async_name_to_address(
                 "FlareContractRegistry", self.aprovider
             )
+            self.assertEqual(addr, fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
+
+            addr = await fpp.coston.products.FlareContractRegistry.async_get_address(self.aprovider)
             self.assertEqual(addr, fpp.FLARE_CONTRACT_REGISTRY_ADDRESS)
 
         async def test_names_to_addresses(self):
