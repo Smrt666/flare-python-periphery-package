@@ -10,11 +10,11 @@ __all__ = [
     "flare",
     "songbird",
     "interface_to_abi",
-    "interface_to_address",
-    "interfaces_to_addresses",
     "name_to_abi",
     "name_to_address",
+    "async_name_to_address",
     "names_to_addresses",
+    "async_names_to_addresses",
     "FLARE_CONTRACT_REGISTRY_ADDRESS",
 ]
 
@@ -84,43 +84,3 @@ def interface_to_abi(interface_name: str, network: str):
         raise KeyError(
             f"Unsupported network '{network}'. Supported networks are coston, coston2, flare and songbird."
         )
-
-
-def interface_to_address(interface_name: str, provider: Web3) -> ChecksumAddress:
-    fcr_contract = provider.eth.contract(
-        FLARE_CONTRACT_REGISTRY_ADDRESS,
-        abi=flare.interface_abis.IFlareContractRegistry,
-    )
-    address = fcr_contract.functions.getContractAddressByName(interface_name).call()
-    return Web3.to_checksum_address(address)
-
-
-def interfaces_to_addresses(
-    interface_names: "list[str]", provider: Web3
-) -> "list[ChecksumAddress]":
-    fcr_contract = provider.eth.contract(
-        FLARE_CONTRACT_REGISTRY_ADDRESS,
-        abi=flare.interface_abis.IFlareContractRegistry,
-    )
-    addresses = fcr_contract.functions.getContractAddressesByName(interface_names).call()
-    return list(map(Web3.to_checksum_address, addresses))
-
-
-async def async_interface_to_address(interface_name: str, provider: AsyncWeb3) -> ChecksumAddress:
-    fcr_contract = provider.eth.contract(
-        FLARE_CONTRACT_REGISTRY_ADDRESS,
-        abi=flare.interface_abis.IFlareContractRegistry,
-    )
-    address = await fcr_contract.functions.getContractAddressByName(interface_name).call()
-    return Web3.to_checksum_address(address)
-
-
-async def async_interfaces_to_addresses(
-    interface_names: "list[str]", provider: AsyncWeb3
-) -> "list[ChecksumAddress]":
-    fcr_contract = provider.eth.contract(
-        FLARE_CONTRACT_REGISTRY_ADDRESS,
-        abi=flare.interface_abis.IFlareContractRegistry,
-    )
-    addresses = await fcr_contract.functions.getContractAddressesByName(interface_names).call()
-    return list(map(Web3.to_checksum_address, addresses))
