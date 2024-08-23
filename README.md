@@ -41,7 +41,7 @@ import asyncio
 import flare_python_periphery_package as fpp
 from eth_typing.evm import ChecksumAddress
 from web3 import AsyncHTTPProvider, AsyncWeb3, HTTPProvider, Web3
-from web3.middleware.geth_poa import geth_poa_middleware
+from web3.middleware.geth_poa import async_geth_poa_middleware, geth_poa_middleware
 
 url = "https://coston2-api.flare.network/ext/C/rpc"
 
@@ -72,7 +72,7 @@ print(f"WNat_address (again): {WNat_address2}")
 
 
 async def main():
-    aw3 = AsyncWeb3(AsyncHTTPProvider(url))
+    aw3 = AsyncWeb3(AsyncHTTPProvider(url), middlewares=[async_geth_poa_middleware])
     addresses = await fpp.async_names_to_addresses(
         ["WNat", "IDontExist", "FlareContractRegistry"], aw3
     )
@@ -83,6 +83,7 @@ async def main():
 
 
 asyncio.run(main())
+
 ```
 
 
